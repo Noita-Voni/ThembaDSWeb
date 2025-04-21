@@ -4,14 +4,14 @@ import cogImage from '@/assets/cog.png';
 import cylinderImage from '@/assets/cylinder.png';
 import noodleImage from '@/assets/noodle.png';
 import Image from 'next/image';
-import {useRef} from 'react';
-import {motion, useScroll, useTransform, useMotionValueEvent} from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 
 
 
 export const Hero = () => {
   const heroRef = useRef(null);
-  const {scrollYProgress} = useScroll({
+  const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start end", "end start"],
   });
@@ -32,9 +32,7 @@ export const Hero = () => {
               Empower Your Digital<br />Journey
             </h1>
             <p className="text-xl text-[#010D3E] tracking-tight mt-6 max-w-lg">
-              Whether You're Scaling In The Cloud,
-              Storing Sensitive Data Or Safeguarding
-              Systems We've Got You Covered.
+              {"Whether you’re scaling in the cloud, storing sensitive data, or safeguarding systems—we’ve got you covered."}
             </p>
             <div className="flex gap-4 items-center mt-8">
               <button className="btn btn-primary">Empower Your Journey</button>
@@ -79,7 +77,7 @@ export const Hero = () => {
               alt="3D noodle object"
               className="absolute right-[-60px] top-[55%] z-20 hidden md:block"
               style={{
-                rotate:30,
+                rotate: 30,
                 translateY: translateY,
               }}
             />

@@ -8,17 +8,18 @@ import avatar6 from "@/assets/avatar-6.png";
 import avatar7 from "@/assets/avatar-7.png";
 import avatar8 from "@/assets/avatar-8.png";
 import avatar9 from "@/assets/avatar-9.png";
-import Image from "next/image";
-import { twMerge } from "tailwind-merge";
-import {motion } from "framer-motion";
-import React from "react";
+import Image   from "next/image";
+import { motion } from "framer-motion";
+import React   from "react";
 
-
+/* ------------------------------------------------------------------ */
+/*  DATA                                                               */
+/* ------------------------------------------------------------------ */
 const testimonials = [
   {
     text: "The starter package let us migrate municipal records to the cloud in a weekend—no downtime, zero stress.",
     imageSrc: avatar1.src,
-    name: "Jamie Rivera, CivicConnect ",
+    name: "Jamie Rivera, CivicConnect",
     username: "@jamietechguru00",
   },
   {
@@ -36,7 +37,7 @@ const testimonials = [
   {
     text: "Your entry‑level cybersecurity hardening blocked the phishing wave that was crippling our staff inboxes.",
     imageSrc: avatar3.src,
-    name: "Morgan Lee,  Siyakhula Academy",
+    name: "Morgan Lee, Siyakhula Academy",
     username: "@morganleewhiz",
   },
   {
@@ -48,13 +49,13 @@ const testimonials = [
   {
     text: "The advanced data‑loss‑prevention rules flagged a breach attempt before our own SOC even saw it.",
     imageSrc: avatar5.src,
-    name: "Taylor Kim, MedX Diagnostics ",
+    name: "Taylor Kim, MedX Diagnostics",
     username: "@taylorkimm",
   },
   {
     text: "Real‑time analytics on delivery routes trimmed fuel costs by 18 % in the first quarter—worth every cent.",
     imageSrc: avatar6.src,
-    name: "Riley Smith,  RideSwift Logistics",
+    name: "Riley Smith, RideSwift Logistics",
     username: "@rileysmith1",
   },
   {
@@ -69,74 +70,87 @@ const testimonials = [
     name: "Sam Dawson, OrbitTel Telecom",
     username: "@dawsontechtips",
   },
-];
+] as const;
 
-const firstColumn = testimonials.slice(0, 3);
+/* ------------------------------------------------------------------ */
+/*  TYPE ALIASES ‑‑ avoids “implicit any / circular reference”        */
+/* ------------------------------------------------------------------ */
+type Testimonial     = (typeof testimonials)[number];
+type TestimonialList = Testimonial[];
+
+/* ------------------------------------------------------------------ */
+/*  SLICE LISTS INTO COLUMNS                                           */
+/* ------------------------------------------------------------------ */
+const firstColumn  = testimonials.slice(0, 3);
 const secondColumn = testimonials.slice(3, 6);
-const thirdColumn = testimonials.slice(6, 9);
+const thirdColumn  = testimonials.slice(6, 9);
 
-const TestimonialsColumn = (props: { className?: string; testimonials: typeof testimonials;
-  duration?: number; 
+/* ------------------------------------------------------------------ */
+/*  COLUMN COMPONENT                                                   */
+/* ------------------------------------------------------------------ */
+const TestimonialsColumn = ({
+  className,
+  testimonials: list,
+  duration = 10,
+}: {
+  className?: string;
+  testimonials: TestimonialList;
+  duration?: number;
+}) => (
+  <div className={className}>
+    <motion.div
+      animate={{ translateY: "-50%" }}
+      transition={{ duration, repeat: Infinity, ease: "linear", repeatType: "loop" }}
+      className="flex flex-col gap-6"
+    >
+      {[...Array(2)].map((_, idx) => (
+        <React.Fragment key={idx}>
+          {list.map(({ text, imageSrc, name, username }) => (
+            <div key={username} className="card">
+              <div>{text}</div>
 
-}) => {
-  return (
-    <div className={props.className}> 
-    <motion.div animate={{
-      translateY: "-50%",
-    }}
-    transition={{
-      duration: props.duration || 10,
-      repeat: Infinity,
-      ease:'linear',
-      repeatType:"loop",
-    }}
-    className="flex flex-col gap-6">
-      {[...new Array(2).fill(0).map((_, index) => (
-        <React.Fragment key={index}>
-                {props.testimonials.map(({ text, imageSrc, name, username }) => (
-        <div className="card">
-          <div>{text}</div>
-          <div className="flex items-center gap-2 mt-5">
-            <Image
-              src={imageSrc}
-              alt={name}
-              width={40}
-              height={40}
-              className="h-10 w-10 rounded-full"
-            />
-            <div className="flex flex-col">
-              <div className="font-medium tracking-tight leading-5">{name}</div>
-              <div className="leading-5 tracking-tight">{username}</div>
+              <div className="flex items-center gap-2 mt-5">
+                <Image
+                  src={imageSrc}
+                  alt={name}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full"
+                />
+                <div className="flex flex-col">
+                  <div className="font-medium tracking-tight leading-5">{name}</div>
+                  <div className="leading-5 tracking-tight">{username}</div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          ))}
         </React.Fragment>
-      ))]}
-
+      ))}
     </motion.div>
-    </div>
-  );
-}
+  </div>
+);
 
-export const Testimonials = () => {
-  return (
-    <section className="bg-white">
-      <div className="container">
-        <div className="section-heading" />
-        <div className="flex justify-center">
-          <div className="tag">What Our Clients Achieved</div>
-        </div>
-        <h2 className="section-title mt-5">Stories of Resilience</h2>
-        <p className="section-description mt-5">
-          Our platform has became an essential tool for users around the world.
-        </p>
-        <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[738px] overflow-hidden">
-          <TestimonialsColumn testimonials={firstColumn} duration={15}/>
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19}/>
-          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17}/>
-        </div>
+/* ------------------------------------------------------------------ */
+/*  MAIN SECTION                                                       */
+/* ------------------------------------------------------------------ */
+export const Testimonials = () => (
+  <section className="bg-white">
+    <div className="container">
+      <div className="section-heading" />
+      <div className="flex justify-center">
+        <div className="tag">What Our Clients Achieved</div>
       </div>
-    </section>
-  );
-};
+
+      <h2 className="section-title mt-5">Stories of Resilience</h2>
+      <p className="section-description mt-5">
+        Our platform has become an essential tool for users around the world.
+      </p>
+
+      <div className="flex justify-center gap-6 mt-10 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[738px] overflow-hidden">
+        <TestimonialsColumn testimonials={firstColumn}  duration={15} />
+        <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+        <TestimonialsColumn testimonials={thirdColumn}  className="hidden lg:block" duration={17} />
+      </div>
+    </div>
+  </section>
+);
